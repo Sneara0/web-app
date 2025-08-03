@@ -16,7 +16,7 @@ const Login = () => {
     setError("");
 
     try {
-      const res = await axios.post("http://localhost:5000/api/users/login", {
+      const res = await axios.post(`${import.meta.env.VITE_API_URL}/login`, {
         email,
         password,
       });
@@ -24,6 +24,7 @@ const Login = () => {
       login(res.data.user); // Save user to context
       navigate("/dashboard"); // Redirect to dashboard
     } catch (err) {
+      console.error(err.response?.data || err.message);
       setError(err.response?.data?.message || "Login failed");
     }
   };
