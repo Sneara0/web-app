@@ -8,12 +8,22 @@ const errorHandler = require("./middlewares/error.middleware");
 
 const app = express();
 
+// Enable JSON parsing
 app.use(express.json());
-app.use(cors());
+
+// ✅ Proper CORS setup (allow frontend domain)
+app.use(cors({
+  origin: "https://web-app-287g.vercel.app", // your frontend URL
+  credentials: true,
+}));
+
+// Secure HTTP headers
 app.use(helmet());
 
+// API routes
 app.use("/api/users", userRoutes);
 
+// Health check route
 app.get("/api/health", (req, res) => {
   res.status(200).json({ message: "Server is healthy 🚀" });
 });
@@ -23,7 +33,7 @@ app.use((req, res) => {
   res.status(404).json({ message: "Route not found" });
 });
 
-// centralized error handling middleware (সব route এর শেষে)
+// Global error handler
 app.use(errorHandler);
 
 module.exports = app;
